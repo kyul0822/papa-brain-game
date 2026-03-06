@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>아빠 기억게임</title>
+<title>아빠 기억훈련</title>
 
 <style>
 
@@ -39,9 +40,11 @@ margin:5px;
 
 <body>
 
-<h2 id="title">기억하기</h2>
+<h2 id="title"></h2>
 
 <div id="game"></div>
+
+<h3 id="score"></h3>
 
 <script>
 
@@ -71,12 +74,13 @@ const words=topics[days[today]]
 
 const game=document.getElementById("game")
 
-let step=1
+let question=0
+let score=0
 let answer=""
 
-showImages()
+showMemory()
 
-function showImages(){
+function showMemory(){
 
 document.getElementById("title").innerText="그림을 기억하세요"
 
@@ -93,6 +97,7 @@ grid.appendChild(img)
 
 })
 
+game.innerHTML=""
 game.appendChild(grid)
 
 setTimeout(startQuiz,8000)
@@ -101,7 +106,29 @@ setTimeout(startQuiz,8000)
 
 function startQuiz(){
 
+nextQuestion()
+
+}
+
+function nextQuestion(){
+
+if(question>=5){
+
+document.getElementById("title").innerText="오늘 점수"
+
 game.innerHTML=""
+
+document.getElementById("score").innerText=score+" / 5"
+
+return
+
+}
+
+question++
+
+game.innerHTML=""
+
+document.getElementById("title").innerText=question+" / 5"
 
 answer=words[Math.floor(Math.random()*words.length)]
 
@@ -110,8 +137,6 @@ const img=document.createElement("img")
 img.src="https://picsum.photos/300?"+answer
 
 game.appendChild(img)
-
-document.getElementById("title").innerText="이 그림은 무엇일까요?"
 
 let options=[...words]
 
@@ -137,6 +162,8 @@ function check(choice){
 
 if(choice==answer){
 
+score++
+
 alert("맞았습니다 👍")
 
 }else{
@@ -145,7 +172,7 @@ alert("정답은 "+answer)
 
 }
 
-location.reload()
+nextQuestion()
 
 }
 
