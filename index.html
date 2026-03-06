@@ -14,23 +14,24 @@ body{
 font-family:sans-serif;
 text-align:center;
 background:#eef7f1;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
 padding:10px;
 }
 
 img{
-width:100%;
+width:250px;
 border-radius:10px;
+margin:10px;
 }
 
 button{
 font-size:18px;
-padding:10px;
+padding:12px;
+margin:6px;
+width:180px;
+}
+
+.result{
+font-size:18px;
 margin:5px;
 }
 
@@ -44,25 +45,23 @@ margin:5px;
 
 <div id="game"></div>
 
-<h3 id="score"></h3>
-
 <script>
 
 const topics={
 
-monday:["산","강","나무","꽃","숲","바다","구름"],
+monday:["산","강","나무","꽃","숲","바다","구름","계곡","돌","풀"],
 
-tuesday:["붕어","잉어","메기","송어","쏘가리","가물치","피라미"],
+tuesday:["붕어","잉어","메기","송어","쏘가리","가물치","피라미","동자개","향어","몰개"],
 
-wednesday:["밥","김치","라면","만두","국","비빔밥","불고기"],
+wednesday:["밥","김치","라면","만두","국","비빔밥","불고기","떡","잡채","된장찌개"],
 
-thursday:["개","고양이","소","말","돼지","닭","토끼"],
+thursday:["개","고양이","소","말","돼지","닭","토끼","사슴","양","오리"],
 
-friday:["컵","의자","시계","안경","신발","우산","가방"],
+friday:["컵","의자","시계","안경","신발","우산","가방","전화기","책","연필"],
 
-saturday:["자동차","버스","기차","자전거","비행기","배","택시"],
+saturday:["자동차","버스","기차","자전거","비행기","배","택시","지하철","트럭","오토바이"],
 
-sunday:["눈","비","단풍","벚꽃","낙엽","구름","햇빛"]
+sunday:["눈","비","단풍","벚꽃","낙엽","구름","햇빛","바람","여름","겨울"]
 
 }
 
@@ -72,53 +71,19 @@ const today=new Date().getDay()
 
 const words=topics[days[today]]
 
-const game=document.getElementById("game")
-
 let question=0
 let score=0
-let answer=""
+let results=[]
 
-showMemory()
-
-function showMemory(){
-
-document.getElementById("title").innerText="그림을 기억하세요"
-
-const grid=document.createElement("div")
-grid.className="grid"
-
-words.forEach(w=>{
-
-const img=document.createElement("img")
-
-img.src="https://picsum.photos/200?"+w
-
-grid.appendChild(img)
-
-})
-
-game.innerHTML=""
-game.appendChild(grid)
-
-setTimeout(startQuiz,8000)
-
-}
-
-function startQuiz(){
+const game=document.getElementById("game")
 
 nextQuestion()
 
-}
-
 function nextQuestion(){
 
-if(question>=5){
+if(question>=10){
 
-document.getElementById("title").innerText="오늘 점수"
-
-game.innerHTML=""
-
-document.getElementById("score").innerText=score+" / 5"
+showFinal()
 
 return
 
@@ -128,9 +93,9 @@ question++
 
 game.innerHTML=""
 
-document.getElementById("title").innerText=question+" / 5"
+document.getElementById("title").innerText=question+" / 10"
 
-answer=words[Math.floor(Math.random()*words.length)]
+const answer=words[Math.floor(Math.random()*words.length)]
 
 const img=document.createElement("img")
 
@@ -144,13 +109,13 @@ options.sort(()=>0.5-Math.random())
 
 options=options.slice(0,5)
 
-options.forEach(o=>{
+options.forEach(opt=>{
 
 const btn=document.createElement("button")
 
-btn.innerText=o
+btn.innerText=opt
 
-btn.onclick=()=>check(o)
+btn.onclick=()=>checkAnswer(opt,answer)
 
 game.appendChild(btn)
 
@@ -158,21 +123,55 @@ game.appendChild(btn)
 
 }
 
-function check(choice){
+function checkAnswer(choice,answer){
 
-if(choice==answer){
+let text=""
+
+if(choice===answer){
 
 score++
 
-alert("맞았습니다 👍")
+text="⭕ 정답"
+
+results.push("⭕ "+answer)
 
 }else{
 
-alert("정답은 "+answer)
+text="❌ 오답 (정답 "+answer+")"
+
+results.push("❌ "+choice+" → "+answer)
 
 }
 
+alert(text)
+
 nextQuestion()
+
+}
+
+function showFinal(){
+
+document.getElementById("title").innerText="오늘 결과"
+
+game.innerHTML=""
+
+results.forEach((r,i)=>{
+
+const div=document.createElement("div")
+
+div.className="result"
+
+div.innerText=(i+1)+"번 "+r
+
+game.appendChild(div)
+
+})
+
+const scoreDiv=document.createElement("h3")
+
+scoreDiv.innerText="점수 : "+score+" / 10"
+
+game.appendChild(scoreDiv)
 
 }
 
