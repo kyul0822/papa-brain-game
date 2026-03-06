@@ -18,21 +18,16 @@ padding:10px;
 }
 
 img{
-width:250px;
+width:260px;
 border-radius:10px;
-margin:10px;
+margin:15px;
 }
 
 button{
-font-size:18px;
+font-size:20px;
 padding:12px;
 margin:6px;
-width:180px;
-}
-
-.result{
-font-size:18px;
-margin:5px;
+width:200px;
 }
 
 </style>
@@ -49,19 +44,69 @@ margin:5px;
 
 const topics={
 
-monday:["산","강","나무","꽃","숲","바다","구름","계곡","돌","풀"],
+monday:{
+"산":"https://upload.wikimedia.org/wikipedia/commons/3/3f/Mountain.jpg",
+"강":"https://upload.wikimedia.org/wikipedia/commons/2/24/River.jpg",
+"나무":"https://upload.wikimedia.org/wikipedia/commons/3/32/Tree.jpg",
+"꽃":"https://upload.wikimedia.org/wikipedia/commons/4/40/Flower.jpg",
+"숲":"https://upload.wikimedia.org/wikipedia/commons/0/0c/Forest.jpg",
+"바다":"https://upload.wikimedia.org/wikipedia/commons/5/5e/Ocean.jpg",
+"구름":"https://upload.wikimedia.org/wikipedia/commons/0/0f/Clouds.jpg"
+},
 
-tuesday:["붕어","잉어","메기","송어","쏘가리","가물치","피라미","동자개","향어","몰개"],
+tuesday:{
+"붕어":"https://upload.wikimedia.org/wikipedia/commons/7/7a/Carassius_carassius.jpg",
+"잉어":"https://upload.wikimedia.org/wikipedia/commons/2/25/Common_carp.jpg",
+"메기":"https://upload.wikimedia.org/wikipedia/commons/3/31/Catfish.jpg",
+"송어":"https://upload.wikimedia.org/wikipedia/commons/2/23/Trout.jpg",
+"쏘가리":"https://upload.wikimedia.org/wikipedia/commons/f/f1/Mandarin_fish.jpg",
+"가물치":"https://upload.wikimedia.org/wikipedia/commons/2/26/Snakehead.jpg"
+},
 
-wednesday:["밥","김치","라면","만두","국","비빔밥","불고기","떡","잡채","된장찌개"],
+wednesday:{
+"밥":"https://upload.wikimedia.org/wikipedia/commons/6/60/Steamed_rice.jpg",
+"김치":"https://upload.wikimedia.org/wikipedia/commons/7/74/Kimchi.jpg",
+"라면":"https://upload.wikimedia.org/wikipedia/commons/a/a8/Ramen.jpg",
+"만두":"https://upload.wikimedia.org/wikipedia/commons/6/6f/Dumplings.jpg",
+"비빔밥":"https://upload.wikimedia.org/wikipedia/commons/4/44/Bibimbap.jpg",
+"불고기":"https://upload.wikimedia.org/wikipedia/commons/7/7a/Bulgogi.jpg"
+},
 
-thursday:["개","고양이","소","말","돼지","닭","토끼","사슴","양","오리"],
+thursday:{
+"개":"https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg",
+"고양이":"https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat.jpg",
+"소":"https://upload.wikimedia.org/wikipedia/commons/7/7b/Cow.jpg",
+"말":"https://upload.wikimedia.org/wikipedia/commons/1/17/Horse.jpg",
+"돼지":"https://upload.wikimedia.org/wikipedia/commons/5/5c/Pig.jpg",
+"닭":"https://upload.wikimedia.org/wikipedia/commons/3/37/Chicken.jpg"
+},
 
-friday:["컵","의자","시계","안경","신발","우산","가방","전화기","책","연필"],
+friday:{
+"컵":"https://upload.wikimedia.org/wikipedia/commons/7/78/Cup.jpg",
+"의자":"https://upload.wikimedia.org/wikipedia/commons/5/5c/Chair.jpg",
+"시계":"https://upload.wikimedia.org/wikipedia/commons/3/3a/Clock.jpg",
+"안경":"https://upload.wikimedia.org/wikipedia/commons/1/16/Glasses.jpg",
+"신발":"https://upload.wikimedia.org/wikipedia/commons/2/20/Shoes.jpg",
+"우산":"https://upload.wikimedia.org/wikipedia/commons/2/29/Umbrella.jpg"
+},
 
-saturday:["자동차","버스","기차","자전거","비행기","배","택시","지하철","트럭","오토바이"],
+saturday:{
+"자동차":"https://upload.wikimedia.org/wikipedia/commons/3/3e/Car.jpg",
+"버스":"https://upload.wikimedia.org/wikipedia/commons/6/6b/Bus.jpg",
+"기차":"https://upload.wikimedia.org/wikipedia/commons/1/10/Train.jpg",
+"자전거":"https://upload.wikimedia.org/wikipedia/commons/0/0c/Bicycle.jpg",
+"비행기":"https://upload.wikimedia.org/wikipedia/commons/2/27/Airplane.jpg",
+"배":"https://upload.wikimedia.org/wikipedia/commons/9/9c/Ship.jpg"
+},
 
-sunday:["눈","비","단풍","벚꽃","낙엽","구름","햇빛","바람","여름","겨울"]
+sunday:{
+"눈":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Snow.jpg",
+"비":"https://upload.wikimedia.org/wikipedia/commons/5/5f/Rain.jpg",
+"단풍":"https://upload.wikimedia.org/wikipedia/commons/5/5c/Autumn_leaves.jpg",
+"벚꽃":"https://upload.wikimedia.org/wikipedia/commons/0/0f/Cherry_blossom.jpg",
+"낙엽":"https://upload.wikimedia.org/wikipedia/commons/a/a2/Fallen_leaves.jpg",
+"햇빛":"https://upload.wikimedia.org/wikipedia/commons/c/c3/Sun.jpg"
+}
 
 }
 
@@ -69,7 +114,9 @@ const days=["sunday","monday","tuesday","wednesday","thursday","friday","saturda
 
 const today=new Date().getDay()
 
-const words=topics[days[today]]
+const data=topics[days[today]]
+
+const words=Object.keys(data)
 
 let question=0
 let score=0
@@ -99,7 +146,7 @@ const answer=words[Math.floor(Math.random()*words.length)]
 
 const img=document.createElement("img")
 
-img.src="https://picsum.photos/300?"+answer
+img.src=data[answer]
 
 game.appendChild(img)
 
@@ -125,25 +172,21 @@ game.appendChild(btn)
 
 function checkAnswer(choice,answer){
 
-let text=""
-
 if(choice===answer){
 
 score++
 
-text="⭕ 정답"
+alert("정답입니다 👍")
 
 results.push("⭕ "+answer)
 
 }else{
 
-text="❌ 오답 (정답 "+answer+")"
+alert("틀렸습니다\n정답: "+answer)
 
 results.push("❌ "+choice+" → "+answer)
 
 }
-
-alert(text)
 
 nextQuestion()
 
@@ -158,8 +201,6 @@ game.innerHTML=""
 results.forEach((r,i)=>{
 
 const div=document.createElement("div")
-
-div.className="result"
 
 div.innerText=(i+1)+"번 "+r
 
