@@ -1,25 +1,156 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>아빠 기억훈련</title>
+<title>아빠 기억게임</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+
+body{
+font-family:sans-serif;
+text-align:center;
+background:#eef7f1;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+padding:10px;
+}
+
+img{
+width:100%;
+border-radius:10px;
+}
+
+button{
+font-size:18px;
+padding:10px;
+margin:5px;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<h1>오늘의 기억훈련</h1>
+<h2 id="title">기억하기</h2>
 
-<h2 id="topicTitle"></h2>
+<div id="game"></div>
 
-<div id="game" class="grid"></div>
+<script>
 
-<script src="script.js"></script>
+const topics={
+
+monday:["산","강","나무","꽃","숲","바다","구름"],
+
+tuesday:["붕어","잉어","메기","송어","쏘가리","가물치","피라미"],
+
+wednesday:["밥","김치","라면","만두","국","비빔밥","불고기"],
+
+thursday:["개","고양이","소","말","돼지","닭","토끼"],
+
+friday:["컵","의자","시계","안경","신발","우산","가방"],
+
+saturday:["자동차","버스","기차","자전거","비행기","배","택시"],
+
+sunday:["눈","비","단풍","벚꽃","낙엽","구름","햇빛"]
+
+}
+
+const days=["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
+
+const today=new Date().getDay()
+
+const words=topics[days[today]]
+
+const game=document.getElementById("game")
+
+let step=1
+let answer=""
+
+showImages()
+
+function showImages(){
+
+document.getElementById("title").innerText="그림을 기억하세요"
+
+const grid=document.createElement("div")
+grid.className="grid"
+
+words.forEach(w=>{
+
+const img=document.createElement("img")
+
+img.src="https://picsum.photos/200?"+w
+
+grid.appendChild(img)
+
+})
+
+game.appendChild(grid)
+
+setTimeout(startQuiz,8000)
+
+}
+
+function startQuiz(){
+
+game.innerHTML=""
+
+answer=words[Math.floor(Math.random()*words.length)]
+
+const img=document.createElement("img")
+
+img.src="https://picsum.photos/300?"+answer
+
+game.appendChild(img)
+
+document.getElementById("title").innerText="이 그림은 무엇일까요?"
+
+let options=[...words]
+
+options.sort(()=>0.5-Math.random())
+
+options=options.slice(0,5)
+
+options.forEach(o=>{
+
+const btn=document.createElement("button")
+
+btn.innerText=o
+
+btn.onclick=()=>check(o)
+
+game.appendChild(btn)
+
+})
+
+}
+
+function check(choice){
+
+if(choice==answer){
+
+alert("맞았습니다 👍")
+
+}else{
+
+alert("정답은 "+answer)
+
+}
+
+location.reload()
+
+}
+
+</script>
 
 </body>
+
 </html>
